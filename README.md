@@ -9,3 +9,8 @@
 2. **2_NER_with_BERT, _classification_with_T5**:
 
     https://www.kaggle.com/code/alexennk/2-ner-with-bert-classification-with-t5/
+
+
+3. **3_Transformers, sampling**:
+
+    https://www.kaggle.com/code/alexennk/3-transformers-sampling/
