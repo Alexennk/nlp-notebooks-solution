@@ -14,3 +14,7 @@
 3. **3_Transformers, sampling**:
 
     https://www.kaggle.com/code/alexennk/3-transformers-sampling/
+
+4. **4. Handling paddings, attention masking, RoPE**:
+
+    https://www.kaggle.com/code/alexennk/4-handling-paddings-attention-masking-rope/
