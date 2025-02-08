@@ -18,3 +18,7 @@
 4. **4. Handling paddings, attention masking, RoPE**:
 
     https://www.kaggle.com/code/alexennk/4-handling-paddings-attention-masking-rope/
+
+5. **5. Batching, scoring, MMLU**:
+
+    https://www.kaggle.com/code/alexennk/5-batching-scoring-mmlu/
