@@ -22,3 +22,7 @@
 5. **5. Batching, scoring, MMLU**:
 
     https://www.kaggle.com/code/alexennk/5-batching-scoring-mmlu/
+
+6. **6. Prompting (CoT, few-shot, self-reflection), inj**:
+
+    https://www.kaggle.com/code/alexennk/6-prompting-cot-few-shot-self-reflection-inj/
