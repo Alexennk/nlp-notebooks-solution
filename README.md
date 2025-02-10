@@ -26,3 +26,7 @@
 6. **6. Prompting (CoT, few-shot, self-reflection), inj**:
 
     https://www.kaggle.com/code/alexennk/6-prompting-cot-few-shot-self-reflection-inj/
+
+7. **7. Tool calling, Agents**:
+
+    https://www.kaggle.com/code/alexennk/7-tool-calling-agents/
