@@ -34,3 +34,5 @@
 9. **9. Finetuning, PEFT, distributed**:
 
     https://www.kaggle.com/code/alexennk/9-finetuning-peft-distributed/
+
+    В этом задании еще два файла для работы с процессами: 2_communications.py и 3_model_parallel.py. Так как это питоновские файлы, то решение только здесь в репозитории

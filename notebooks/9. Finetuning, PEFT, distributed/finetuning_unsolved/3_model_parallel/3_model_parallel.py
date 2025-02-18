@@ -13,7 +13,11 @@ def send_2d_tensor(tensor, dst):
     Давайте напишем функцию, которая вначале посылает двумерный тензор shape размерностей тензора, а потом
     уже его содержимое
     """
-    raise NotImplemented()
+    if dist.get_rank() != dst:        
+        dist.send(torch.tensor(tensor.shape, dtype=torch.int64), dst=dst)
+        dist.send(tensor, dst=dst)
+    # print(f"Ранг текущего процесса: {dist.get_rank()}. Отправленный тензор:\n{tensor}")
+    
 
 
 def recv_2d_tensor(src):
@@ -23,7 +27,13 @@ def recv_2d_tensor(src):
     2. Создавать тензор нужных размерностей для приема данных
     3. Принимать данные в этот тензор и возвращать его
     """
-    raise NotImplemented()
+    if dist.get_rank() != src:
+        shape = torch.zeros(2, dtype=torch.int64)
+        dist.recv(tensor=shape, src=src)
+        tensor = torch.zeros(tuple(shape.tolist()))
+        dist.recv(tensor=tensor, src=src)
+        # print(f"Ранг текущего процесса: {dist.get_rank()}. Полученный тензор:\n{tensor}")
+        return tensor
 
 
 class PipeliningLinearLayer(nn.Module):
@@ -36,10 +46,14 @@ class PipeliningLinearLayer(nn.Module):
     def forward(self, x):
         """
         Здесь нужно дописать логику, описанную в test_pipelining
-        
         """
-        raise NotImplemented()
-        
+        if dist.get_rank() == 0:
+            output_1 = self.ln1(x)
+            send_2d_tensor(output_1, 1)
+            return None
+        else:
+            output_1 = recv_2d_tensor(0)
+            return self.ln2(output_1)        
 
     def forward_full_rank_0(self, x):
         if dist.get_rank() == 0:
@@ -63,7 +77,6 @@ def test_pipelining():
     sync_module_params(pp_layer)
     pp_input = gen_random_tensor_at_0(7, 16)
     pp_output = pp_layer(pp_input)
-
 
     if dist.get_rank() == 1:
         send_2d_tensor(pp_output, 0)
@@ -90,13 +103,18 @@ def test_tensor_parallel():
     X = torch.rand(7, 16)
     dist.broadcast(X, 0)
 
+    Y1, Y2, Y = torch.empty_like(X), torch.empty_like(X), torch.zeros(X.shape[0], A.shape[1])
+    mid = A.shape[1] // 2
     if dist.get_rank() == 0:
-        raise NotImplemented()
+        Y1 = X @ A[:, :mid]
     else:
-        raise NotImplemented()
+        Y2 = X @ A[:, mid:]
+    dist.broadcast(Y2, 1) # передать Y2 на 0й процесс
+    if dist.get_rank() == 0:
+        Y = torch.cat([Y1, Y2], dim=1)
+    dist.broadcast(Y, 0)
     
     Y_REF = X @ A
-
     assert torch.allclose(Y_REF, Y)
     print("Успешно отработал tensor parallel")
     
@@ -110,3 +128,4 @@ if __name__ == "__main__":
     dist.init_process_group(backend=get_backend(), rank=local_rank, world_size=world_size)
     test_pipelining()
     test_tensor_parallel()
+    # вывод программы в файле output.txt
