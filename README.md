@@ -30,3 +30,7 @@
 7. **7. Tool calling, Agents**:
 
     https://www.kaggle.com/code/alexennk/7-tool-calling-agents/
+
+9. **9. Finetuning, PEFT, distributed**:
+
+    https://www.kaggle.com/code/alexennk/9-finetuning-peft-distributed/
